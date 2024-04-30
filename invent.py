@@ -1,19 +1,12 @@
 import streamlit as st
-import mysql.connector
-from dotenv import load_dotenv
 import os
-
-# Load environment variables from .env file
-load_dotenv()
 
 class Inventory:
     def __init__(self):
-        self.conn = mysql.connector.connect(
-            host=os.getenv("DB_HOST"),
-            user=os.getenv("DB_USER"),
-            password=os.getenv("DB_PASSWORD"),
-            database=os.getenv("DB_DATABASE")
-        )
+        # Load database configuration from secrets.toml
+        db_config = st.secrets["connections.mysql"]
+        self.conn = st.connection(data=db_config, type='mysql')
+        #self.conn = mysql.connector.connect('mysql', type='sql')
         self.create_table()
 
     def create_table(self):
