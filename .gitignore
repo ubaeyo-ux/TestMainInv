@@ -3,4 +3,4 @@
 __pycache__/
 
 # Environments
-Inventory-Management-App\.streamlit\secrets.toml
+*.streamlit/secrets.toml
