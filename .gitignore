@@ -3,6 +3,5 @@
 __pycache__/
 
 # Environments
-.env
-
 secrets.toml.py
+.streamlit\secrets.toml
