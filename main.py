@@ -1,51 +1,36 @@
-# Necessary Importations
 import streamlit as st
-import mysql.connector
+import sqlite3
 
-
-# Define class inventory
+# Define class Inventory
 class Inventory:
-    # Define constructor for the class 
     def __init__(self):
-        # Load database configuration from secrets.toml
-        db_config = {
-            "host": st.secrets["DB_HOST"],
-            "port": st.secrets["PORT"],
-            "user": st.secrets["DB_USER"],
-            "password": st.secrets["DB_PASSWORD"],
-            "database": st.secrets["DB_DATABASE"]
-        }
-
-        # Connect to MySQL database
-        self.conn = mysql.connector.connect(**db_config)
+        # Connect to SQLite database
+        self.conn = sqlite3.connect('inventory.db')
         self.create_table()
 
     def create_table(self):
         cursor = self.conn.cursor()
         cursor.execute('''CREATE TABLE IF NOT EXISTS products (
-                            name VARCHAR(255) PRIMARY KEY,
-                            weight INT,
-                            quantity INT
+                            name TEXT PRIMARY KEY,
+                            weight REAL,
+                            quantity INTEGER
                           )''')
         self.conn.commit()
 
     def add_product_to_db(self, name, weight, quantity):
         cursor = self.conn.cursor()
-        cursor.execute('''INSERT INTO products (name, weight, quantity)
-                          VALUES (%s, %s, %s)
-                          ON DUPLICATE KEY UPDATE
-                          weight = VALUES(weight),
-                          quantity = quantity + VALUES(quantity)''', (name, weight, quantity))
+        cursor.execute('''INSERT OR REPLACE INTO products (name, weight, quantity)
+                          VALUES (?, ?, ?)''', (name, weight, quantity))
         self.conn.commit()
 
     def sell_product_from_db(self, name, quantity):
         cursor = self.conn.cursor()
-        cursor.execute('''SELECT quantity FROM products WHERE name=%s''', (name,))
+        cursor.execute('''SELECT quantity FROM products WHERE name=?''', (name,))
         row = cursor.fetchone()
         if row:
             available_quantity = row[0]
             if available_quantity >= quantity:
-                cursor.execute('''UPDATE products SET quantity = quantity - %s WHERE name=%s''', (quantity, name))
+                cursor.execute('''UPDATE products SET quantity = quantity - ? WHERE name=?''', (quantity, name))
                 self.conn.commit()
                 st.write(f"{quantity} units of {name} sold.")
             else:
@@ -77,13 +62,14 @@ sidebar = st.sidebar.container()
 current_stock = st.container()
 
 with header:
-    header.markdown('### **This streamlit app supports Automated SQL Server Database Inventory System**')
+    header.markdown('### **Streamlit Inventory Tracker: Automated SQLite Database Support**')
     st.image('../Inventory-Management-App/image/taifa2image.jpg')
     header.markdown('-----')
     
 # Sidebar for adding products
 with sidebar:
     st.header("Addition or Sale of Products from Database")
+    st.subheader('**Add Product**')
 
     product_name = st.text_input("Product Name")
     product_weight = st.number_input("Product Weight (kg)", min_value=0.5, step=0.5)
@@ -94,7 +80,7 @@ with sidebar:
 
 # Sidebar for selling products
 with sidebar:
-    st.header("**Sell Product**")
+    st.subheader("**Sell Product**")
 
     product_names = inventory.get_product_names()
     sell_product_name = st.selectbox("Product Name", product_names)
@@ -106,7 +92,7 @@ with sidebar:
 # Display current inventory
 with current_stock:
     st.subheader("**Current Inventory**")
-    st.markdown('##### **Inventory remaining after a successful Sale**')
+    st.markdown('##### **Inventory remaining after successful Product Addition or Sale**')
 
     cursor = inventory.conn.cursor()
     cursor.execute('''SELECT * FROM products''')
