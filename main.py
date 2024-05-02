@@ -63,9 +63,9 @@ current_stock = st.container()
 
 with header:
     header.markdown('### **Streamlit Inventory Tracker: Automated SQLite Database Support**')
-    st.image('../Inventory-Management-App/image/taifa2image.jpg')
+    st.image('image/taifa2image.jpg')
     header.markdown('-----')
-    
+
 # Sidebar for adding products
 with sidebar:
     st.header("Addition or Sale of Products from Database")
