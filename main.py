@@ -33,8 +33,12 @@ class Inventory:
             cursor.execute('''UPDATE products SET quantity=? WHERE name=?''', (new_quantity, name))
         else:
             cursor.execute('''INSERT INTO products (name, quantity) VALUES (?, ?)''', (name, quantity))
-        self.conn.commit()        
-        st.write(f"Product '{name}' (Quantity: {quantity}) added successfully.")
+        self.conn.commit()
+        if "Bakers" in name:        
+            st.write(f"Product '{name}' (Quantity: {quantity} bags) added successfully.")
+        else:
+            st.write(f"Product '{name}' (Quantity: {quantity} bales) added successfully.")
+
 
     def sell_product_from_db(self, name, quantity):
         cursor = self.conn.cursor()
@@ -45,7 +49,11 @@ class Inventory:
             if available_quantity >= quantity:
                 cursor.execute('''UPDATE products SET quantity = quantity - ? WHERE name=?''', (quantity, name))
                 self.conn.commit()
-                st.write(f"{quantity} units of '{name}' sold.")
+                if "Bakers" in name:
+                    st.write(f"{quantity} bags of '{name}' sold.")
+                else:
+                    st.write(f"{quantity} bales of '{name}' sold.")
+
             else:
                 st.write("Not enough stock available.")
 
