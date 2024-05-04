@@ -92,7 +92,7 @@ st.set_page_config(
 )    
 
 def main():
-    st.title("**Streamlit Inventory Tracker: Automated SQLite Database Support**")
+    st.title("Streamlit Inventory Tracker: Automated SQLite Database Support")
     st.image("image/taifa2image.jpg")
 
     inventory = Inventory()
