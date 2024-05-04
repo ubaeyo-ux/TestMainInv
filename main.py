@@ -42,8 +42,6 @@ class Inventory:
                 st.write(f"{quantity} units of '{name}' sold.")
             else:
                 st.write("Not enough stock available.")
-        else:
-            st.write("Product not found in inventory.")
 
     def delete_product(self, name):
         cursor = self.conn.cursor()
@@ -99,13 +97,13 @@ def main():
 
     inventory = Inventory()
 
-    option = st.selectbox("Select Action", ["Add Product", "Sell Product", "View Stock", "Adjust Quantity", "Delete Product"])
+    option = st.selectbox("**Select Action**", ["Add Product", "Sell Product", "View Stock", "Adjust Quantity", "Delete Product"])
 
     if option == "Add Product":
         st.header("Add Product")
-        product_name = st.text_input("Product Name")
-        product_quantity = st.number_input("Quantity", min_value=1, step=1)  # Minimum value set to 1
-        if st.button("Add Product"):
+        product_name = st.text_input("**Product Name**")
+        product_quantity = st.number_input("**Quantity**", min_value=1, step=1)  # Minimum value set to 1
+        if st.button("**Add Product**"):
             if product_quantity <= 0:  # Check if quantity is zero or negative
               st.error("Quantity must be a positive integer.")
             else:
@@ -117,9 +115,9 @@ def main():
         if not product_names:
             st.write("No products available for sale.")
         else:
-            product_name = st.selectbox("Select Product to Sell", product_names)
-            product_quantity = st.number_input("Quantity to sell", min_value=1, step=1)
-            if st.button("Sell Product"):
+            product_name = st.selectbox("**Select Product to Sell**", product_names)
+            product_quantity = st.number_input("**Quantity to sell**", min_value=1, step=1)
+            if st.button("**Sell Product**"):
                 inventory.sell_product_from_db(product_name, product_quantity)
     elif option == "Delete Product":
         st.header("Delete Product")
@@ -127,8 +125,8 @@ def main():
         if not product_names:
             st.write("No products available for deletion.")
         else:
-            product_to_delete = st.selectbox("Select Product to Delete", product_names)
-            if st.button("Delete Product"):
+            product_to_delete = st.selectbox("**Select Product to Delete**", product_names)
+            if st.button("**Delete Product**"):
                 inventory.delete_product(product_to_delete)
     elif option == "Adjust Quantity":
         st.header("Adjust Quantity")
@@ -136,8 +134,8 @@ def main():
         if not product_names:
             st.write("No products available for adjustment.")
         else:
-            product_to_adjust = st.selectbox("Select Product to Adjust", product_names)
-            new_quantity = st.number_input("Enter New Quantity", min_value=0, step=1)  # Minimum value set to 0
+            product_to_adjust = st.selectbox("**Select Product to Adjust**", product_names)
+            new_quantity = st.number_input("**Enter New Quantity**", min_value=0, step=1)  # Minimum value set to 0
         if st.button("Adjust Quantity"):
             if new_quantity < 0:  # Check if quantity is negative
                 st.error("Quantity must be a non-negative integer.")
