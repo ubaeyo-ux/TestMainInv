@@ -61,7 +61,7 @@ class Inventory:
         cursor = self.conn.cursor()
         cursor.execute('''DELETE FROM products WHERE name=?''', (name,))
         self.conn.commit()
-        st.write(f"Product '{name}' deleted successfully.")     
+        st.write(f"Product '{name}' deleted successfully from Database.")     
 
     def adjust_quantity(self, name, quantity_reduction):
         cursor = self.conn.cursor()
@@ -73,7 +73,11 @@ class Inventory:
                 new_quantity = current_quantity - quantity_reduction
                 cursor.execute('''UPDATE products SET quantity=? WHERE name=?''', (new_quantity, name))
                 self.conn.commit()
-                st.write(f"Quantity of product '{name}' reduced by {quantity_reduction} units.")
+                if 'Bakers' in name:
+                    st.write(f"Quantity of product '{name}' reduced by {quantity_reduction} bags.")
+                else:
+                    st.write(f"Quantity of product '{name}' reduced by {quantity_reduction} bales.")
+
             else:
                 st.write("Error: The requested reduction exceeds the current quantity.")
         else:
