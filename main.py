@@ -247,7 +247,7 @@ def main():
             st.write("No products available for adjustment.")
         else:
             product_to_adjust = st.selectbox("**Select Product to Adjust** :arrow_down_small:", product_names)
-            new_quantity = st.number_input("**Enter New Quantity**", min_value=0, step=1)  # Minimum value set to 0
+            new_quantity = st.number_input("**Enter Quantity**", min_value=0, step=1)  # Minimum value set to 0
         if st.button("Adjust Quantity"):
             if new_quantity < 0:  # Check if quantity is negative
                 st.error("Quantity must be a non-negative integer.", icon="🚨")
