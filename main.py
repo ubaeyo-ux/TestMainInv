@@ -1,19 +1,54 @@
 import streamlit as st
 import sqlite3
+import streamlit_authenticator as stauth
+import yaml
+from yaml.loader import SafeLoader
+
+# Set page configuration
+st.set_page_config(
+    page_title="Inventory Management App",
+    page_icon=":bar_chart:",
+    layout="wide",
+    initial_sidebar_state="auto",
+)
+
+# Display app title and image
+st.title("Streamlit Inventory Tracker:dart:") 
+st.header(":rainbow[Automated SQLite Database Support]:sparkles:")
+st.image("image/taifa2image.jpg")
+
+# Load hashed passwords
+with open('./config.yaml') as file:
+    config = yaml.load(file, Loader=SafeLoader)
+
+authenticator = stauth.Authenticate(
+    config['credentials'],
+    config['cookie']['name'],
+    config['cookie']['key'],
+    config['cookie']['expiry_days'],
+    config['pre-authorized']
+)
+
+# Add css to hide item with title "show password text"
+st.markdown(
+    """ 
+<style>
+    [title = "Show password text"] {
+       display : none;
+    }
+  </style>  
+""",
+   unsafe_allow_html=True
+)
 
 # Define class 'Inventory'
 class Inventory:
-    # Define Class constructor 'self'
     def __init__(self):
-        #create a database connection object 'inventory.db'
         self.conn = sqlite3.connect('inventory.db')
         self.create_table()
     
-    #Define class methods
     def create_table(self):
-        #create 'cursor' object
         cursor = self.conn.cursor()
-        #call of cursor objects' 'execute' method
         cursor.execute('''CREATE TABLE IF NOT EXISTS products (
                             name TEXT PRIMARY KEY,
                             quantity INTEGER
@@ -101,23 +136,69 @@ class Inventory:
         return product_names
 
 
-# Custom theme and styling code
-st.set_page_config(
-    page_title="Inventory Management App",
-    page_icon=":bar_chart:",
-    layout="wide",
-    initial_sidebar_state="auto",
-)    
-
 def main():
-    st.title("Streamlit Inventory Tracker:dart:") 
-    st.header(":rainbow[Automated SQLite Database Support]:sparkles:")
-    st.image("image/taifa2image.jpg")
-#'_Streamlit_ is :blue[cool] :sunglasses:'
+    # Check if user is authenticated
+    if not st.session_state.get("authentication_status"):
+        # Render login module
+        authenticator.login("main", clear_on_submit=True)
+
+        if st.session_state["authentication_status"] is None:
+            st.warning('Please enter your username and password')
+            return
+        elif not st.session_state["authentication_status"]:
+            st.error('Username/password is incorrect')
+            return
+    
+    # If user is authenticated, proceed with the app functionality
+    authenticator.logout()
+    st.write(f'Welcome *{st.session_state["name"]}*')
+
+    # Create an instance of Inventory class
     inventory = Inventory()
 
-    option = st.selectbox("**Select Action** :small_red_triangle_down:", ["Add Product", "Sell Product", "View Stock", "Adjust Quantity", "Delete Product"])
+    # Display sidebar options
+    sidebar_option = st.sidebar.selectbox("Select Option:", ["Change Password", "Register New User", "Forgot Password"])
 
+    # Handle sidebar options
+    # Implement functionality to change password new here 
+    if sidebar_option == "Change Password":
+        if st.session_state["authentication_status"]:
+            try:
+                if authenticator.reset_password(st.session_state["username"], fields={'Form name':'Reset password', 'Current password':'Current password', 'New password':'New password', 'Repeat password': 'Repeat password', 'Reset':'Reset'},
+                                                 location="sidebar", clear_on_submit=True ):
+                    st.success('Password modified successfully')
+            except Exception as e:
+                    st.error(e)
+
+     # Implement functionality to register new user here               
+    elif sidebar_option == "Register New User":
+        st.sidebar.header("Register New User")
+        try:
+            email_of_registered_user, username_of_registered_user, name_of_registered_user = authenticator.register_user(
+                fields={'Form name':'Register user', 'Email':'Email', 'Username':'Username', 'Password':'Password', 'Repeat password':'Repeat password', 'Register':'Register'},location="sidebar", clear_on_submit=True, pre_authorization=False)
+            if email_of_registered_user:
+                st.success('User registered successfully')
+        except Exception as e:
+                st.error(e)
+        
+    # Implement functionality for forgot password here    
+    elif sidebar_option == "Forgot Password":
+        st.sidebar.header("Forgot Password")
+    try:
+        username_of_forgotten_password, email_of_forgotten_password, new_random_password = authenticator.forgot_password(location="sidebar",fields={'Form name':'Forgot password', 'Username':'Username', 'Submit':'Submit'})
+        if username_of_forgotten_password:
+            st.success('New password to be sent securely')
+        # The developer should securely transfer the new password to the user.
+        elif username_of_forgotten_password == False:
+            st.error('Username not found')
+    except Exception as e:
+        st.error(e)
+        
+    # Update the configuration file
+    with open('config.yaml', 'w') as file:
+        yaml.dump(config, file)
+
+    option = st.selectbox("**Select Action** :small_red_triangle_down:", ["Add Product", "Sell Product", "View Stock", "Adjust Quantity", "Delete Product"])
     
     if option == "Add Product":
         st.header("Add Product")
@@ -160,7 +241,7 @@ def main():
             if st.button("**Delete Product**"):
                 inventory.delete_product(product_to_delete) 
     elif option == "Adjust Quantity":
-        st.header("Adjust Quantity: (Decrease)")
+        st.header("Adjust Quantity: (Minimize Stock)")
         product_names = inventory.get_product_names()
         if not product_names:
             st.write("No products available for adjustment.")
@@ -183,6 +264,7 @@ def main():
                 st.write(f"{name}: {quantity} bags.")
             else:
                 st.write(f"{name}: {quantity} bales.")
+
 
 if __name__ == '__main__':
     main()

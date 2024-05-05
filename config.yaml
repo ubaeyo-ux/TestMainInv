@@ -1,0 +1,21 @@
+cookie:
+  expiry_days: 30
+  key: taifa
+  name: feeding
+credentials:
+  usernames:
+    bkaitany:
+      email: benjaminkipkem@gmail.com
+      failed_login_attempts: 0
+      logged_in: false
+      name: Benjamin Kaitany
+      password: $2b$12$Q5NBiRSfEAVReMlqGTZeteIW1WyQqaripAvE5hQ7EC7uIchBPThEC
+    jogendo:
+      email: jogendo@gmail.com
+      failed_login_attempts: 0
+      logged_in: false
+      name: Jonam Ogendo
+      password: $2b$12$Vdq3YQ6TuKtKQhIxSSkj5u2A/MapRsgmU4i9LkVebwN01Lxnh98Zy
+pre-authorized:
+  emails:
+  - benjaminkipkem@gmail.com
