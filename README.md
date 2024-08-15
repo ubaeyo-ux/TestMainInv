@@ -4,7 +4,7 @@
 
 Welcome to my Inventory Management Application! This project showcases how to use Streamlit to create powerful data applications by embedding a Python script as the backend. The application integrates a SQLite3 database, a lightweight and serverless solution, to efficiently manage inventory computations.
 
-Project Overview
+## Project Overview
 This project demonstrates the implementation of an Inventory Management system designed for Mombasa Maize Millers, a leading Kenyan-based grain processing manufacturer. The application provides a user-friendly interface that allows users to:
 - **View Current Inventory:** Quickly access up-to-date inventory levels.
 - **Add or Sell Products:** Seamlessly manage stock by adding new products or recording sales.
@@ -20,7 +20,7 @@ This project demonstrates the implementation of an Inventory Management system d
 - **Streamlit:** The framework used to create the interactive web interface.
 - **SQLite3:** The database used to manage inventory data without the need for a server.
 
-### Usage
+## Usage
 
 To use the Streamlit Inventory Management App, use below link:
 
@@ -42,17 +42,25 @@ To run the Streamlit Inventory Management App locally for trial purposes, follow
 
 1. Clone this repository: 
 
-     `git clone https://github.com/kaitany/Inventory-Management-App`
+     ```bash
+     git clone https://github.com/kaitany/Inventory-Management-App
+     ```
 
 2. Navigate to the project folder:
 
-     `cd Inventory-Management-App`
+     ```bash
+     cd Inventory-Management-App
+     ```
 3. Install the required dependencies:
 
-     `pip install -r requirements.txt`
+     ```bash 
+     pip install -r requirements.txt
+     ```
 4. Run the Streamlit app: 
 
-    `streamlit run main.py`
+    ```bash 
+    streamlit run main.py
+    ```
 
 
 ## Contributing
