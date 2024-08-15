@@ -26,15 +26,15 @@ To use the Streamlit Inventory Management App, use below link:
 
 |  Deployed App |
 |------:|
-| [https://inventory-management-app.streamlit.app/](/) |
+| [Streamlit Inventory Management App](https://inventory-management-app.streamlit.app/) |
 
 The app will display the user interface, requesting login credentials.
 
 For trial purposes, you can use the following login details:
 
-**username:** marto
+**username:** bkaitany
 
-**password:** dope
+**password:** vuduz
 
 ## Installation
 
