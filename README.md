@@ -34,7 +34,7 @@ For trial purposes, you can use the following login details:
 
 **username:** bkaitany
 
-**password:** vuduz
+**password:** voodoo
 
 ## Installation
 
