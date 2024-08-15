@@ -28,6 +28,7 @@ authenticator = stauth.Authenticate(
     config['cookie']['expiry_days'],
     config['pre-authorized']
 )
+print(config['credentials'])
 
 # Add css to hide item with title "show password text"
 st.markdown(
