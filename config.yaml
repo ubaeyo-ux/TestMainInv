@@ -9,13 +9,13 @@ credentials:
       failed_login_attempts: 0
       logged_in: true
       name: Benjamin Kaitany
-      password: $2y$12$jvVnKFRDjVl1xEnIRyAqQ.NVtDs4vJfBmuES1D2sj2LZmKULLSjZm
+      password: $2a$12$6zXJjWKWfM1d6ejkkZw.WeukeXraHZPNY3dejlUqX9C35D2AMEThu
     jogendo:
       email: jogendo@gmail.com
       failed_login_attempts: 0
       logged_in: false
       name: Jonam Ogendo
-      password: $2b$12$43mqvIzKnppoMBrL5AFOeulS1JQifMwA27HOxlkD23o9tVLa3GSNe
+      password: $2a$12$6zXJjWKWfM1d6ejkkZw.WeukeXraHZPNY3dejlUqX9C35D2AMEThu
 pre-authorized:
   emails:
   - benjaminkipkem@gmail.com
